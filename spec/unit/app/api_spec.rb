@@ -17,22 +17,22 @@ module ExpenseTracker
 
     describe 'POST /expenses' do
       context 'when the expense is sucessfully recorded' do
-        it 'returns the expense id' do
-          expense = { 'some' => 'data' }
+        let(:expense) { expense = { 'some' => 'data' } }
 
+        before do
           # `allow` is a rspec-mock behavior that configures the behavior of the test double
           # when the caller (API) invokes `record`, the double will return a new RecordResult instance indicating success
           allow(ledger).to receive(:record).with(expense).and_return(RecordResult.new(true, 123, nil))
+        end
 
+        it 'returns the expense id' do
           post '/expenses', JSON.generate(expense)
 
           response = JSON.parse(last_response.body)
           expect(response).to include('expense_id' => 123)
         end
-        it 'responds with a status code 200' do
-          expense = { 'some' => 'data' }
-          allow(ledger).to receive(:record).with(expense).and_return(RecordResult.new(true, 123, nil))
 
+        it 'responds with a status code 200' do
           post '/expenses', JSON.generate(expense)
 
           expect(last_response.status).to eq(200)
