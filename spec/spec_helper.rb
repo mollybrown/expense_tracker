@@ -99,4 +99,8 @@ RSpec.configure do |config|
   Kernel.srand config.seed
 
   config.filter_gems_from_backtrace('rack', 'rack-test', 'sequel', 'sinatra') # filter out framework gem code from backtraces
+
+  config.when_first_matching_example_defined(:db) do
+    require_relative 'support/db' # conditionally load support code as needed for :db tagged examples
+  end
 end

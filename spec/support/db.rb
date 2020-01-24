@@ -8,4 +8,8 @@ RSpec.configure do |c|
     DB[:expenses].truncate # drop all test data from expenses table
   end
 
+  c.around(:example, :db) do |example| # use :db metadata tag
+    DB.transaction(rollback: :always) { example.run } # run each example requiring the DB w/i a transaction, then rollback
+  end
+
 end
